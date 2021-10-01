@@ -333,7 +333,7 @@ def loadAngles(filename):
     elif ext== ".npy":
         return np.load(filename)
     elif ext==".mat":
-        from genfire.fileio import readVolume
+        from fileio import readVolume
         return readVolume(filename)
     else:
         raise IOError("Unsupported file extension \"{}\" for Euler angles".format(ext))

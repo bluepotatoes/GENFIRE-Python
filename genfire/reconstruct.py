@@ -13,14 +13,15 @@ Copyright 2015-2016. All rights reserved.
 
 from __future__ import division
 import matplotlib
-#matplotlib.use("Qt5Agg")
 import matplotlib.pyplot as plt
 import os
 import scipy.io
+import numpy as np
 import time
-import genfire
+# import genfire
 from multiprocessing import Pool
-from genfire.utility import *
+from utility import *
+import fileio
 
 PI = np.pi
 if __name__ != "__main__":
@@ -340,11 +341,11 @@ if __name__ != "__main__":
         measuredK[np.isnan(measuredK)] = 0
 
         if enforce_resolution_circle:
-            Q = genfire.utility.generateKspaceIndices(measuredK)
+            Q = generateKspaceIndices(measuredK)
             measuredK[Q>1] = 0
 
         # apply Hermitian symmetry
-        measuredK = genfire.utility.hermitianSymmetrize(measuredK)
+        measuredK = hermitianSymmetrize(measuredK)
 
         if verbose:
             print ("Fourier grid assembled in {0:0.1f} seconds".format(time.time()-tic))
@@ -474,10 +475,10 @@ if __name__ != "__main__":
             print ("Fourier grid assembled in {0:0.1f} seconds".format(time.time()-tic))
 
         if enforce_resolution_circle:
-            Q = genfire.utility.generateKspaceIndices(measuredK)
+            Q = generateKspaceIndices(measuredK)
             measuredK[Q>1] = 0
 
-        return genfire.utility.hermitianSymmetrize(measuredK)[:-1,:-1,:-1]
+        return hermitianSymmetrize(measuredK)[:-1,:-1,:-1]
 
     def readMAT(filename):
         """
@@ -695,11 +696,11 @@ if __name__ != "__main__":
 
 
 def toString(string):
-    try:
-        import genfire.gui.utility
-        return genfire.gui.utility.toString(string)
-    except ImportError:
-        return str(string)
+    # try:
+    #     import utility
+    #     return genfire.gui.utility.toString(string)
+    # except ImportError:
+    return str(string)
 
 class ReconstructionParameters():
 
@@ -907,7 +908,7 @@ class GenfireReconstructor():
         """)
 
     def printParams(self):
-        from genfire.utility import printStringOrNumpyArray
+        # from utility import printStringOrNumpyArray
         printStringOrNumpyArray(self.params.projections, 'Projections')
         printStringOrNumpyArray(self.params.eulerAngles, 'Euler angles')
         printStringOrNumpyArray(self.params.support, 'Support')
@@ -932,12 +933,12 @@ class GenfireReconstructor():
 
         # Handle parameters that can be either passed as a filename or a numpy array
         if isinstance(self.params.projections, str):
-            projections = genfire.fileio.loadProjections(self.params.projections) # load projections into a 3D numpy array
+            projections = fileio.loadProjections(self.params.projections) # load projections into a 3D numpy array
         else:
             projections = self.params.projections
 
         if isinstance(self.params.eulerAngles, str):
-            eulerAngles = genfire.fileio.loadAngles(self.params.eulerAngles)
+            eulerAngles = fileio.loadAngles(self.params.eulerAngles)
         else:
             eulerAngles = self.params.eulerAngles
 
@@ -959,7 +960,7 @@ class GenfireReconstructor():
         if (self.params.useDefaultSupport or self.params.support == ""):
             support = np.ones((dims[0],dims[0],dims[0]),dtype=float)
         elif isinstance(self.params.support, str):
-            support = (genfire.fileio.readVolume(self.params.support) != 0).astype(bool)
+            support = (fileio.readVolume(self.params.support) != 0).astype(bool)
         else:
             support = self.params.support
 
@@ -972,20 +973,20 @@ class GenfireReconstructor():
             initialObject = self.params.initialObject
         else:
             if self.params.initialObject is not None and os.path.isfile(self.params.initialObject):
-                initialObject = genfire.fileio.readVolume(self.params.initialObject)
+                initialObject = fileio.readVolume(self.params.initialObject)
                 initialObject = np.pad(initialObject,((padding,padding),(padding,padding),(padding,padding)),'constant')
             else:
                 initialObject = np.zeros_like(support)
                 
         # grid the projections
         if self.params.griddingMethod == "DFT":
-            measuredK = genfire.reconstruct.fillInFourierGrid_DFT(projections,
+            measuredK = fillInFourierGrid_DFT(projections,
                                                                   eulerAngles,
                                                                   self.params.interpolationCutoffDistance,
                                                                   self.params.enforceResolutionCircle,
                                                                   self.params.verbose)
         else:
-            measuredK = genfire.reconstruct.fillInFourierGrid(projections,
+            measuredK = fillInFourierGrid(projections,
                                                               eulerAngles,
                                                               self.params.interpolationCutoffDistance,
                                                               self.params.enforceResolutionCircle,
@@ -995,7 +996,7 @@ class GenfireReconstructor():
         measuredK = np.fft.ifftshift(measuredK)
 
         # create a map of the spatial frequency to be used to control resolution extension/suppression behavior
-        K_indices = genfire.utility.generateKspaceIndices(support)
+        K_indices = generateKspaceIndices(support)
         K_indices = np.fft.fftshift(K_indices)
         resolutionIndicators = np.zeros_like(K_indices)
         resolutionIndicators[measuredK != 0] = 1-K_indices[measuredK != 0]
