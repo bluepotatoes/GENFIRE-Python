@@ -27,11 +27,11 @@ def main_InteractivelySetParameters():
     # GENFIRE's reconstruction parameters can be edited here by the user and run interactively, any inputs provided
     # by either the command line or the GUI will override these momentarily
 
-    filename_projections = 'data/npy_projections.npy'  #filename of projections, which should be size NxNxN_projections where N_projections is the number of projections
-    filename_angles = 'data/npy_angles.npy'  #angles can be either a 1xN_projections array containing a single tilt series, or 3xN_projections array containing 3 Euler angles for each projections in the form [phi;theta;psi]
+    filename_projections = '../data/npy_projections.npy'  #filename of projections, which should be size NxNxN_projections where N_projections is the number of projections
+    filename_angles = '../data/npy_angles.npy'  #angles can be either a 1xN_projections array containing a single tilt series, or 3xN_projections array containing 3 Euler angles for each projections in the form [phi;theta;psi]
     filename_support = None  #'../data/support60.mat'  #NxNxN binary array specifying a region of 1's in which the reconstruction can exist
     filename_initialObject = None  #initial object to use in reconstruction; set to None to provide no initial guess
-    filename_results = "data/fullsizeoutput.npy" # 'GENFIRE_rec.mrc'  #filename to save results
+    filename_results = "../data/fullsizeoutput.npy" # 'GENFIRE_rec.mrc'  #filename to save results
     resolutionExtensionSuppressionState = 2 # 1) Turn on resolution extension/suppression, 2) No resolution extension/suppression, 3) Just resolution extension
 
     numIterations = 100  #number of iterations to run in iterative reconstruction
