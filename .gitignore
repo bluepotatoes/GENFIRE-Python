@@ -4,7 +4,7 @@ genfire.egg-info/
 .DS_Store
 build/
 dist/
-data/
+# data/
 UNKNOWN.egg-info/
 bin/
 
