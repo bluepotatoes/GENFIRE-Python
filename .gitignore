@@ -1,0 +1,20 @@
+GENFIRE.egg-info/
+.idea/
+.DS_Store
+build/
+dist/
+UNKNOWN.egg-info/
+bin/
+
+PhaseRetrieval/
+dist/
+build/
+*.tif
+*.tiff
+*.xml
+*.pyc
+*rec*.mrc
+*rec*.txt
+results*
+# test*
+projections*
