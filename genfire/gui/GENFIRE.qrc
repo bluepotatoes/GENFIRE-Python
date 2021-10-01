@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>GENFIRE.png</file>
-        <file>GF.png</file>
-    </qresource>
-</RCC>

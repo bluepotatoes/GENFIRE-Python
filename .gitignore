@@ -1,8 +1,10 @@
 GENFIRE.egg-info/
+genfire.egg-info/
 .idea/
 .DS_Store
 build/
 dist/
+data/
 UNKNOWN.egg-info/
 bin/
 
