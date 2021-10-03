@@ -18,23 +18,24 @@ PI = np.pi
 
 try:
     import pyfftw
+    threads=48
 
     #These are just wrappers around various flavors of the FFT
-    def rfftn(arr, threads=6):
+    def rfftn(arr, threads=threads):
         return pyfftw.interfaces.numpy_fft.rfftn(arr,overwrite_input=True,threads=threads)
-    def irfftn(arr, threads=6):
+    def irfftn(arr, threads=threads):
         return pyfftw.interfaces.numpy_fft.irfftn(arr,overwrite_input=True,threads=threads)
-    def rfftn_fftshift(arr, threads=6):
+    def rfftn_fftshift(arr, threads=threads):
         return pyfftw.interfaces.numpy_fft.fftshift(pyfftw.interfaces.numpy_fft.rfftn(pyfftw.interfaces.numpy_fft.ifftshift(arr),overwrite_input=True,threads=threads))
-    def irfftn_fftshift(arr, threads=6):
+    def irfftn_fftshift(arr, threads=threads):
         return pyfftw.interfaces.numpy_fft.fftshift(pyfftw.interfaces.numpy_fft.irfftn(pyfftw.interfaces.numpy_fft.ifftshift(arr),overwrite_input=True,threads=threads))
-    def fftn(arr, threads=6):
+    def fftn(arr, threads=threads):
         return pyfftw.interfaces.numpy_fft.fftn(arr,overwrite_input=True,threads=threads)
-    def ifftn(arr, threads=6):
+    def ifftn(arr, threads=threads):
         return pyfftw.interfaces.numpy_fft.ifftn(arr,overwrite_input=True,threads=threads)
-    def fftn_fftshift(arr, threads=6):
+    def fftn_fftshift(arr, threads=threads):
         return pyfftw.interfaces.numpy_fft.fftshift(pyfftw.interfaces.numpy_fft.fftn(pyfftw.interfaces.numpy_fft.ifftshift(arr),overwrite_input=True,threads=threads))
-    def ifftn_fftshift(arr, threads=6):
+    def ifftn_fftshift(arr, threads=threads):
         return pyfftw.interfaces.numpy_fft.fftshift(pyfftw.interfaces.numpy_fft.ifftn(pyfftw.interfaces.numpy_fft.ifftshift(arr),overwrite_input=True,threads=threads))
 
 except ImportError:
